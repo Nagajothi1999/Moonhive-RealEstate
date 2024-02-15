@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+{% block title %}Tenant Profile{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Tenant Information</h1>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{ tenant.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>{{ tenant.address }}</td>
+                    </tr>
+                    <tr>
+                        <th>Document Proof:</th>
+                        <td>{{ tenant.document_proofs }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Rental Information</h1>
+            {% if rental_info %}
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Property Name</th>
+                            <th>Property Address</th>
+                            <th>Property Location</th>
+                            <th>Property Features</th>
+                            <th>Rent Cost</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for agreement in rental_info %}
+                        <tr>
+                            <td>{{ agreement.property.name }}</td>
+                            <td>{{ agreement.property.address }}</td>
+                            <td>{{ agreement.property.location }}</td>
+                            <td>{{ agreement.property.features }}</td>
+                            <td>{{ agreement.unit.rent_cost }}</td>
+                            <td>{{ agreement.unit.type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No rental information available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

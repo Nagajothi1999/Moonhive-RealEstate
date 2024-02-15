@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% block title %}Unit Update{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Unit Update</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="rent_cost">Rent Cost:</label>
+            <input type="text" class="form-control" id="rent_cost" name="rent_cost" value="{{ data.rent_cost }}">
+        </div>
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <select class="form-control" id="type" name="type">
+                <option value="{{ data.type }}">{{ data.type }}</option>
+                {% for option in choice %}
+                    {% if option != data.type %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Unit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% block title %}Tenant Update{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Tenant Update</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ data.name }}">
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea class="form-control" id="address" name="address">{{ data.address }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="document_proofs">Document Proof:</label>
+            <input type="text" class="form-control" id="document_proofs" name="document_proofs" value="{{ data.document_proofs }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Tenant</button>
+    </form>
+</div>
+{% endblock %}

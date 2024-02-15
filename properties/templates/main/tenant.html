@@ -1,0 +1,103 @@
+{% extends 'main/base.html' %}
+{% block title %}Tenant{% endblock %}
+{% block content %}
+
+<section class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Tenant</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-primary my-3" onclick="showForm()">Add Tenant</button>
+        </div>
+    </div>
+
+    <form method="GET" action="" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search" id="search" class="form-control" placeholder="Search cost, tenant, property, unit" value="{{ request.GET.search }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-secondary"  onclick="clearSearch()">Clear</button>
+        </div>
+    </form>
+
+    <div id="prop" class="d-none">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="propertyName" class="form-label">Name:</label>
+                <input id="propertyName" type="text" name="name" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <textarea id="address" type="text" name="address" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="document_proofs" class="form-label">Document Proofs:</label>
+                <input id="document_proofs" type="text" name="document_proofs" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Add Tenant</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Property & Unit</th>
+                    <th>Cost</th>
+                    <th>Agreement End Date</th>
+                    <th>Monthly Rent Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in datas %}
+                <tr>
+                    <td>{{ i.tenant.name }}</td>
+                    <td>
+                        {% for agreement in i.agreements %}
+                            {{ agreement.property.name }} - {{ agreement.unit.type }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for agreement in i.agreements %} 
+                            {{ agreement.unit.rent_cost }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for agreement in i.agreements %} 
+                            {{ agreement.agreement_end_date }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for agreement in i.agreements %} 
+                            {{ agreement.monthly_rent_date }} <br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="update_tenant?Tenant_id={{i.tenant.id}}" class="btn btn-primary">Update</a>
+                        <a href="delete_tenant?Tenant_id={{i.tenant.id}}" class="btn btn-danger">Delete</a>
+                        <a href="agreement?Tenant_id={{i.tenant.id}}" class="btn btn-info">Add agreement</a>
+                        <a href="tenant_profile?Tenant_id={{i.tenant.id}}" class="btn btn-info">View profile</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    const showForm = () => document.getElementById("prop").classList.remove('d-none');
+    
+    const clearSearch = () => {
+        document.getElementById('search').value = '';
+        const tenantForm = document.getElementById('tenant-form'); // Change 'tenant-form' to the ID of the form in your tenant page
+        if (tenantForm) {
+            tenantForm.submit();
+        }
+    };
+</script>
+
+{% endblock %}

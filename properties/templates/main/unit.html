@@ -1,0 +1,78 @@
+{% extends 'main/base.html' %}
+{% block title %}Unit{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Property</h1>
+    <table class="table">
+        <tr>
+            <th>Property Name</th>
+            <td>{{ property.name }}</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td>{{ property.address }}</td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>{{ property.location }}</td>
+        </tr>
+        <tr>
+            <th>Features</th>
+            <td>{{ property.features }}</td>
+        </tr>
+    </table>
+
+    <h1>Units</h1>
+    {% if units %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Rent cost</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for unit in units %}
+            <tr>
+                <td>{{ unit.rent_cost }}</td>
+                <td>{{ unit.type }}</td>
+                <td>
+                    <a href="update_unit?Unit_id={{ unit.id }}&Prop_id={{ property.id }}" class="btn btn-sm btn-primary">Update</a>
+                    <a href="delete_unit?Unit_id={{ unit.id }}&Prop_id={{ property.id }}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <button onclick="showAddUnitForm()" class="btn btn-primary">Add Unit</button>
+    <div id="unit-form" style="display: none;">
+        <h2>Add Unit</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cost">Cost:</label>
+                <input type="text" class="form-control" id="cost" name="cost">
+            </div>
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <select class="form-control" id="type" name="type">
+                    <option value="1BHK">1BHK</option>
+                    <option value="2BHK">2BHK</option>
+                    <option value="3BHK">3BHK</option>
+                    <option value="4BHK">4BHK</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Add Unit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showAddUnitForm() {
+        document.getElementById("unit-form").style.display = "block";
+    }
+</script>
+{% endblock %}

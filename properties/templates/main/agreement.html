@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+{% block title %}Agreement{% endblock %}
+{% block content %}
+<section class="container">
+    <h1>Agreements</h1>
+    
+    <button class="btn btn-primary my-3" onclick="showForm()">Add Agreement</button>
+    
+    <div id="prop" class="d-none">
+        <form method="post" id="agreementForm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="propertySelect" class="form-label">Select Property:</label>
+                <select id="propertySelect" name="property" class="form-select">
+                    <option>Choose</option>
+                    {% for property in properties %}
+                    <option value="{{ property.id }}">{{ property.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="unitSelect" class="form-label">Select Unit:</label>
+                <select id="unitSelect" name="unit" class="form-select"> 
+                    <option>Choose</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="agreement_end_date" class="form-label">Agreement End Date:</label>
+                <input id="agreement_end_date" type="date" name="agreement_end_date" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="monthly_rent_date" class="form-label">Monthly Rent Date:</label>
+                <input id="monthly_rent_date" type="text" name="monthly_rent_date" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-outline-primary mb-3">Add Agreement</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tenant</th>
+                    <th>Property & Unit</th>
+                    <th>Agreement End Date</th>
+                    <th>Monthly Rent Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in datas %}
+                <tr>
+                    <td>{{ i.tenant }}</td>
+                    <td>{{ i.unit }}</td>
+                    <td>{{ i.agreement_end_date }}</td>
+                    <td>{{ i.monthly_rent_date }}</td>
+                    <td>
+                        <a href="delete_agreement?Agreement_id={{ i.id }}&Tenant_id={{ tenant_id }}" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    const showForm = () => document.getElementById("prop").classList.remove('d-none');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const propertySelect = document.getElementById('propertySelect');
+        const unitSelect = document.getElementById('unitSelect');
+
+        propertySelect.addEventListener('change', function() {
+            const propertyId = this.value;
+            fetch(`/get_units/${propertyId}`)
+                .then(response => response.json())
+                .then(units => {
+                    unitSelect.innerHTML = '';
+                    units.forEach(unit => {
+                        const option = document.createElement('option');
+                        option.value = unit.id;
+                        option.textContent = unit.type;
+                        unitSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching units:', error);
+                });
+        });
+    });
+</script>
+{% endblock %}
